@@ -8,7 +8,7 @@
 class EntityManager {
     private: 
         inline static std::vector<Entity*> entities = {};
-        static Player* player;
+        inline static Player* player = NULL;
     public:
         static Entity* spawn(EntityType type, EntityInfo info);
         static Player* getPlayer();

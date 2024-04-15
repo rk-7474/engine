@@ -72,6 +72,8 @@ void World::reload() {
     // Chunk* center = getCurrentChunk(); 
     iCoords center = getPlayerChunkPosition();
 
+    printf("reloading chunks");
+
     rendered = {};
 
     create(center.x, center.y);
