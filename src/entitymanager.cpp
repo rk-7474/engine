@@ -1,4 +1,5 @@
 #include "entitymanager.h"
+#include "config.h"
 
 Entity* EntityManager::spawn(EntityType type, EntityInfo info) {
     Entity* new_entity = new Entity(type, info.size, info.coords);

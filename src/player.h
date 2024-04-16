@@ -2,14 +2,13 @@
 
 #include "types.h"
 #include "entity.h"
+#include "config.h"
 
 class Entity;
 
 class Player : public Entity {
     public:
-        Player(Size size, fCoords coords) : Entity("ENTITY_PLAYER", size, coords) {
-            this->coords = {0.0f, 0.0f};
-        };
+        Player(Size size, fCoords coords) : Entity("ENTITY_PLAYER", size, coords) {};
 
         void move(int x, int y);
         void render();

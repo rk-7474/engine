@@ -2,60 +2,55 @@
 #include "texture.h"
 #include "player.h"
 #include "entitymanager.h"
+#include "camera.h"
+#include "app.h"
 
-static iCoords last_player_chunk_coords;
+static iCoords last_tile;
 
 void World::update() {
     render();   
 
-    iCoords current_player_chunk_coords = getPlayerChunkPosition();
+    iCoords current_tile = getCurrent();
 
-    if (last_player_chunk_coords.x != current_player_chunk_coords.x || last_player_chunk_coords.y != current_player_chunk_coords.y) {
+    if (last_tile.x != current_tile.x || last_tile.y != current_tile.y) {
         reload();        
     }
 
-    last_player_chunk_coords = current_player_chunk_coords;
+    last_tile = current_tile;
 }
 
-Chunk* World::getCurrent() {
-    iCoords player_chunk_coords = getPlayerChunkPosition();
-
-    for (int i = 0; i < rendered.size(); i++) {
-        iCoords current_chunk_coords = rendered.at(i)->getPosition();
-        if (current_chunk_coords.x == player_chunk_coords.x && current_chunk_coords.y == player_chunk_coords.y) {
-            return rendered.at(i);
-        }
-    }
-}
-
-iCoords World::getPlayerChunkPosition() {
+iCoords World::getCurrent() {
     fCoords player_coords = EntityManager::getPlayer()->getPosition();
-    
-    iCoords player_chunk_coords = {
-        player_coords.x / (CHUNK_SIZE * TILE_SIZE),
-        player_coords.y / (CHUNK_SIZE * TILE_SIZE),
+
+    iCoords current_tile = {
+        player_coords.x / TILE_SIZE,
+        player_coords.y / TILE_SIZE,
     };
 
-    return player_chunk_coords;
+    return current_tile;    
 }
 
 void World::render() {
-    for (int i = 0; i < rendered.size(); i++) {
-        rendered.at(i)->render();
+    fCoords camera_coords = Camera::getPosition();
+
+    for (auto const& [x, yMap] : tiles) {
+        for (auto const& [y, id] : yMap) {
+            int tile_x = x * TILE_SIZE - camera_coords.x;
+            int tile_y = y * TILE_SIZE - camera_coords.y;
+
+            SDL_Rect rect = {tile_x, tile_y, TILE_SIZE, TILE_SIZE};
+            SDL_RenderCopy(App::renderer, World::getTexture(id), NULL, &rect);
+        }
     }
 }
 
-void World::load(Chunk* chunk) {
-    rendered.push_back(chunk);
+void World::load(int x, int y, char id) {
+    tiles[x][y] = id;
 }
 
-void World::unload(int id) {
-    for (int i = 0; i < rendered.size(); i++)
-        if (rendered.at(i)->getId() == id) {
-            delete rendered.at(i);
-            rendered.erase(rendered.begin() + i);
-            return;
-        }
+void World::unload(int x, int y) {
+    tiles[x].erase(y);
+    if (tiles[x].empty()) tiles.erase(x);
 }
 
 void World::create(int x, int y) {
@@ -63,40 +58,23 @@ void World::create(int x, int y) {
 }
 
 void World::loadFromMemory(int x, int y) {
-    Chunk* new_chunk = new Chunk(x, y);
-    new_chunk->fill(0);
-    load(new_chunk);
+    load(x, y, 0);
 }
 
 void World::reload() {
-    // Chunk* center = getCurrentChunk(); 
-    iCoords center = getPlayerChunkPosition();
+    iCoords center = getCurrent();
 
-    printf("reloading chunks");
+    tiles.clear();
 
-    rendered = {};
-
-    create(center.x, center.y);
-
-    for (int i = 1; i < RENDER_DISTANCE; i++) {
-        create(center.x - i, center.y);
-        create(center.x + i, center.y);
-        create(center.x, center.y + i);
-        create(center.x, center.y - i);
-    
-        if (i > 1) {
-            int j = i-1;
-            create(center.x + j, center.y + j);
-            create(center.x + j, center.y - j);
-            create(center.x - j, center.y + j);
-            create(center.x - j, center.y - j);
-        }
-    }
+    for (int x = center.x - RENDER_DISTANCE; x <= center.x + RENDER_DISTANCE; x++)
+        for (int y = center.y - RENDER_DISTANCE; y <= center.y + RENDER_DISTANCE; y++)
+            create(x, y);
 }   
 
-void World::registerTile(char* texture) {
-    tiles_textures.push_back(loadTexture(texture));
+void World::registerTile(char* texture, char id) {
+    textures[id] = loadTexture(texture);
 }
-SDL_Texture* World::getTexture(int id) {
-    return tiles_textures.at(id);
+SDL_Texture* World::getTexture(char id) {
+    return textures[id];
 }
+

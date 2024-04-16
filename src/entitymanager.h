@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include "chunk.h"
 #include "entity.h"
 #include "player.h"
 

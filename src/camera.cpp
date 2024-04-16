@@ -11,5 +11,5 @@ void Camera::setPosition(fCoords coords) {
 }
 
 fCoords Camera::getPosition() {
-    return absolute;    
+    return { absolute.x + offset.x, absolute.y + offset.y };    
 }

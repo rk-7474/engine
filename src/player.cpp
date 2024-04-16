@@ -30,8 +30,8 @@ void Player::update() {
 }
 
 void Player::move(int x, int y) {
-    coords.x -= x * deltaTime;
-    coords.y -= y * deltaTime;
+    coords.x += x * deltaTime;
+    coords.y += y * deltaTime;
 
     Camera::setPosition(coords);
 }

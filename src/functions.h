@@ -6,7 +6,8 @@
 
 void DrawFps();
 
-
+void DrawText(char* text, int size);
 char* concat(char* first, char* second);
+void DrawInfo();
 
 // int len(char* array[]);

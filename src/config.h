@@ -19,7 +19,7 @@ static int PLAYER_HEIGHT = 84;
 static int MIN_DECORS = 100;
 static int MAX_DECORS = 100;
 
-static int RENDER_DISTANCE = 1;
+static int RENDER_DISTANCE = 3;
 
 
 

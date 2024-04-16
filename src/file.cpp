@@ -31,9 +31,10 @@ void loadTiles() {
     string fileName = "resources/tiles.data";
     if (File::read(fileName, tiles) == 1) return;
 
+    char c = 0;
     for (std::string line : tiles) {
         printf("Loading tile %s\n", line.data());
-        World::registerTile(line.data());
+        World::registerTile(line.data(), c++);
     }
 
 }   
