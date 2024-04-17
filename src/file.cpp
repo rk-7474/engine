@@ -1,6 +1,7 @@
 #include "file.h"
 #include "world.h"
 #include "texture.h"
+#include "config.h"
 #include <string>
 #include <fstream>
 #include <SDL2/SDL_image.h>
@@ -31,11 +32,12 @@ void loadTiles() {
     string fileName = "resources/tiles.data";
     if (File::read(fileName, tiles) == 1) return;
 
-    char c = 0;
+    char c = 1;
     for (std::string line : tiles) {
         printf("Loading tile %s\n", line.data());
         World::registerTile(line.data(), c++);
     }
+    TILES_NUMBER = c - 1;
 
 }   
 

@@ -54,12 +54,63 @@ void World::unload(int x, int y) {
 }
 
 void World::create(int x, int y) {
-    loadFromMemory(x, y);
+    generate(x, y, true);
 }
 
 void World::loadFromMemory(int x, int y) {
-    load(x, y, 0);
+    load(x, y, 1);
 }
+
+int World::generate(int x, int y, bool create_neighbors) {
+    int id;
+    if (!create_neighbors)
+        id = rand() % 2 + 1;
+    else
+        id = getNeighbors(x, y);
+
+    load(x, y, id);
+    return id;
+}
+
+int World::getNeighbors(int x, int y) {
+
+    std::vector<int> neighbors;
+
+    for (int i = 0; i <= TILES_NUMBER; i++) {
+        neighbors.push_back(0);
+    }
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == 0 && j == 0) continue;
+
+            int new_x = x + i;
+            int new_y = y + j;
+
+            int id;
+
+            if (tiles[new_x][new_y] == NULL || tiles[new_x][new_y] == 0)
+                id = generate(new_x, new_y, false);
+            else 
+                id = tiles[new_x][new_y];
+            
+            neighbors[id]++;
+        } 
+    }
+
+    int max_n = 0;
+    int max_id = 0;
+
+    for (int i = 1; i < neighbors.size(); i++) {
+        if (max_n == 0 || neighbors.at(i) > max_n) {
+            max_id = i;
+            max_n = neighbors.at(i);
+        }
+    }
+
+    return max_id;
+}
+
 
 void World::reload() {
     iCoords center = getCurrent();

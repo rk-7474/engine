@@ -18,4 +18,10 @@ class World {
         static SDL_Texture* getTexture(char id);
         static void create(int x, int y);
         static void loadFromMemory(int x, int y);
+        static int generate(int x, int y, bool create_neighbors);
+
+        static int getNeighbors(int x, int y);
+        
+
+
 };

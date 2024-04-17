@@ -21,5 +21,8 @@ static int MAX_DECORS = 100;
 
 static int RENDER_DISTANCE = 3;
 
+static int TILES_NUMBER = 0;
+
+
 
 
