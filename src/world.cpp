@@ -63,10 +63,10 @@ void World::loadFromMemory(int x, int y) {
 
 int World::generate(int x, int y, bool create_neighbors) {
     int id;
-    if (!create_neighbors)
+    // if (!create_neighbors)
         id = rand() % 2 + 1;
-    else
-        id = getNeighbors(x, y);
+    // else
+        // id = getNeighbors(x, y);
 
     load(x, y, id);
     return id;
@@ -123,6 +123,7 @@ void World::reload() {
 }   
 
 void World::registerTile(char* texture, char id) {
+    printf("Loading %s with ID %d\n", texture, id);
     textures[id] = loadTexture(texture);
 }
 SDL_Texture* World::getTexture(char id) {

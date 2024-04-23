@@ -1,0 +1,13 @@
+#OBJS = main.cpp $(shell find ./src -name '*.cpp')
+
+OBJ_NAME = executable
+
+all:
+	make -C src
+	mv src/$(OBJ_NAME) .
+
+
+clean:
+	make -C src clean
+	
+

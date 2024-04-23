@@ -6,14 +6,14 @@
 #include "config.h"
 #include "functions.h"
 #include "camera.h"
+#include "drawtext.h"
 #include <time.h>
 #include <stdlib.h>
-#include <SDL2/SDL_ttf.h>
 
 void App::start() {
     srand(time(NULL));
     EntityManager::init();
-    TTF_Init();
+    Text::Init();
     loadTiles();
     // Utils::getDecors();
 

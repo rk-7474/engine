@@ -1,5 +1,5 @@
-#include "src/functions.h"
-#include "src/app.h"
+#include "functions.h"
+#include "app.h"
 
 int main() {
 	App().run();

@@ -34,11 +34,11 @@ void loadTiles() {
 
     char c = 1;
     for (std::string line : tiles) {
-        printf("Loading tile %s\n", line.data());
+        printf("Loading tile %s with id %d\n", line.data(), (int)c);
         World::registerTile(line.data(), c++);
     }
     TILES_NUMBER = c - 1;
-
+    printf("Tiles loaded: %d\n", TILES_NUMBER);
 }   
 
 void loadDecors(std::vector<SDL_Texture*>& textures) {

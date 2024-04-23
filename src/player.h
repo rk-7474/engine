@@ -11,6 +11,7 @@ class Player : public Entity {
         Player(Size size, fCoords coords) : Entity("ENTITY_PLAYER", size, coords) {};
 
         void move(int x, int y);
+        
         void render();
 
         void update();

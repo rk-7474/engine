@@ -7,17 +7,17 @@
 std::map<char*, SDL_Texture*> loaded_textures;
 
 SDL_Texture* loadTexture(char* texture_name) {
-    if (loaded_textures.find(texture_name) != loaded_textures.end())
-        return loaded_textures[texture_name];
+    // if (loaded_textures.find(texture_name) != loaded_textures.end())
+    //     return loaded_textures[texture_name];
 
     SDL_Texture* texture = IMG_LoadTexture(App::renderer, texture_name);
 
-    if (texture == NULL) {
-        printf("Error loading texture \"%s\"!\nError: %s\n", texture_name, SDL_GetError());
-        return NULL;
-    }
+    // if (texture == NULL) {
+    //     printf("Error loading texture \"%s\"!\nError: %s\n", texture_name, SDL_GetError());
+    //     return NULL;
+    // }
 
-    loaded_textures[texture_name] = texture;
+    // loaded_textures[texture_name] = texture;
 
     return texture;
 }
