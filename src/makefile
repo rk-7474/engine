@@ -1,29 +1,24 @@
-#OBJS = main.cpp $(shell find ./src -name '*.cpp')
+OBJS:=$(patsubst %.cpp, %.o, $(notdir $(wildcard *.cpp)))
 
-# OBJS:=$(pathsubst %.cpp,%.o,$(shell find . -name '*.cpp'))
+CC=g++
 
-OBJS:= $(addprefix ../build/, $(patsubst %.cpp,%.o, $(notdir $(wildcard *.cpp))))
+COMPILER_FLAGS=-std=c++20 -I .
 
-CC = g++
+LINKER_FLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf
 
-COMPILER_FLAGS = -Wall -std=c++20 -I .
+OBJ_NAME=run
 
-LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+%.o:
+	$(CC) $(COMPILER_FLAGS) -c $(patsubst %.o,%.cpp,$@) -o $@
 
-OBJ_NAME = executable
+$(OBJ_NAME): $(OBJS)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
-all: 
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o ../$(OBJ_NAME)
-
-
-%.o: %.cpp
-	$(CC) $(COMPILER_FLAGS) -c ./src/$< -o ../build/$@
-
-
-
-#all:
-#	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
-
+all:
+	mv ../build/*.o .
+	make $(OBJ_NAME)
+	mv *.o ../build/
+	
 clean:
 	rm -f *.o
 
